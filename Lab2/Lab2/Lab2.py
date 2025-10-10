@@ -63,4 +63,5 @@ def wstaw_obraz(w,h,m,n, obraz):
     tab = tab.astype(bool)
     return Image.fromarray(tab)
 
+
 wstaw_obraz(200, 100, 10, 10, inicjaly).show()
