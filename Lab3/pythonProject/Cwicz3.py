@@ -3,6 +3,11 @@ import numpy as np
 
 from Lab3 import rysuj_ramki_kolorowe, rysuj_po_skosie_szare
 
+def zmien_kolor(kolor, zmiana):
+    kolor[0] = (kolor[0] + zmiana) % 256
+    kolor[1] = (kolor[1] + zmiana) % 256
+    kolor[2] = (kolor[2] + zmiana) % 256
+    return kolor
 
 # Zadanie 1
 
@@ -25,23 +30,27 @@ def rysuj_ramki_szare(w, h, grub, zmiana_koloru):
 
     return Image.fromarray(tab)
 
-rysuj_ramki_szare(250, 180, 10, 25).show()
+#rysuj_ramki_szare(250, 180, 30, 50).show()
 
-def rysuj_pasy_pionowe_szare(w, h, grub, kolor1, kolor2):
+def rysuj_pasy_pionowe_szare(w, h, grub, zmiana_koloru):
     t = (h, w,3)
     tab = np.ones(t, dtype=np.uint8)
     ile = int(w/grub)
+    kolor1 = [50, 50, 50]
+    kolor2 = [150, 150, 150]
     for k in range(ile):
         kolor = kolor1 if k % 2 == 0 else kolor2
         for g in range(ile):
             i = k * grub + g
             for j in range(h):
                 tab[j,i] = kolor
+        zmien_kolor(kolor1, zmiana_koloru)
+        zmien_kolor(kolor2, zmiana_koloru)
     tab = tab * 255
     return Image.fromarray(tab)
 
 
-#rysuj_pasy_pionowe_szare(100, 180, 10, [50,50,50], [200,200,200]).show()
+#rysuj_pasy_pionowe_szare(100, 180, 10, 50).show()
 
 # Zadanie 2
 gwiazdka = Image.open("gwiazdka.bmp")
@@ -68,7 +77,29 @@ def negatyw(obraz):
     else:
         return "Zły format obrazu"
 
-negatyw(gwiazdka).show()
-negatyw(rysuj_ramki_kolorowe(200, [20,120,220], 6, 5, -6)).show()
-negatyw(rysuj_po_skosie_szare(100, 300, 6, 5)).show()
+#negatyw(gwiazdka).show()
+#negatyw(rysuj_ramki_kolorowe(200, [20,120,220], 6, 5, -6)).show()
+#negatyw(rysuj_po_skosie_szare(100, 300, 6, 5)).show()
 
+# Zadanie 3
+inicjaly = Image.open("inicjaly.bmp")
+
+def koloruj_w_paski(obraz, grub, zmiana_kolor):
+    t_obraz = np.asarray(obraz)
+    h, w = t_obraz.shape
+    t =(h, w, 3)
+    kolor = [120, 240, 50]
+    tab = np.ones(t, dtype=np.uint8)
+    ile = int(h/ grub)
+    for k in range(ile):
+        for g in range(grub):
+            i = k * grub + g
+            for j in range(w):
+                if t_obraz[i, j] == False:
+                    tab[i, j] = kolor
+                else:
+                    tab[i, j] = [255, 255, 255]
+        zmien_kolor(kolor, zmiana_kolor)
+    return Image.fromarray(tab)
+
+#koloruj_w_paski(inicjaly, 10, 50).show()
