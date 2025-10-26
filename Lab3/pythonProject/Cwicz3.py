@@ -30,7 +30,8 @@ def rysuj_ramki_szare(w, h, grub, zmiana_koloru):
 
     return Image.fromarray(tab)
 
-#rysuj_ramki_szare(250, 180, 30, 50).show()
+#rysuj_ramki_szare(250, 180, 20, 50).show()
+#rysuj_ramki_szare(250, 180, 20, 50).save("rysuj_ramki_szare.bmp")
 
 def rysuj_pasy_pionowe_szare(w, h, grub, zmiana_koloru):
     t = (h, w,3)
@@ -51,25 +52,24 @@ def rysuj_pasy_pionowe_szare(w, h, grub, zmiana_koloru):
 
 
 #rysuj_pasy_pionowe_szare(100, 180, 10, 50).show()
+#rysuj_pasy_pionowe_szare(100, 180, 10, 50).save("rysuj_pasy_pionowe_szare.bmp")
 
 # Zadanie 2
 gwiazdka = Image.open("gwiazdka.bmp")
 
 def negatyw(obraz):
     tab = np.asarray(obraz)
-    h, w = tab.shape
+    if len(tab.shape) == 2:
+        h, w = tab.shape
+    elif len(tab.shape) == 3:
+        h, w, c = tab.shape
     tab_neg = tab.copy()
-    if obraz.mode == 1:
+    if obraz.mode == "1":
         for i in range(h):
             for j in range(w):
                 tab_neg[i, j] = 1 - tab[i, j]
         return Image.fromarray(tab_neg)
-    elif obraz.mode == "L":
-        for i in range(h):
-            for j in range(w):
-                tab_neg[i, j] = 255 - tab[i, j]
-        return Image.fromarray(tab_neg)
-    elif obraz.mode == "RGB":
+    elif obraz.mode == "L" or obraz.mode == "RGB":
         for i in range(h):
             for j in range(w):
                 tab_neg[i, j] = 255 - tab[i, j]
@@ -77,9 +77,13 @@ def negatyw(obraz):
     else:
         return "Zły format obrazu"
 
+
 #negatyw(gwiazdka).show()
+#negatyw(gwiazdka).save("negatyw_gwiazdka.bmp")
 #negatyw(rysuj_ramki_kolorowe(200, [20,120,220], 6, 5, -6)).show()
+#negatyw(rysuj_ramki_kolorowe(200, [20,120,220], 6, 5, -6)).save("negatyw_ramki_kolorowe.png")
 #negatyw(rysuj_po_skosie_szare(100, 300, 6, 5)).show()
+#negatyw(rysuj_po_skosie_szare(100, 300, 6, 5)).save("negatyw_skosy_szare.bmp")
 
 # Zadanie 3
 inicjaly = Image.open("inicjaly.bmp")
@@ -102,4 +106,6 @@ def koloruj_w_paski(obraz, grub, zmiana_kolor):
         zmien_kolor(kolor, zmiana_kolor)
     return Image.fromarray(tab)
 
-#koloruj_w_paski(inicjaly, 10, 50).show()
+koloruj_w_paski(inicjaly, 10, 50).show()
+koloruj_w_paski(inicjaly, 10, 50).save("koloruj_paski.png")
+koloruj_w_paski(inicjaly, 10, 50).save("koloruj_paski.jpg")

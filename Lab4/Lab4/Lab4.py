@@ -68,4 +68,3 @@ combined1 = np.concatenate((rgb, a_ext), axis=-1)
 cmyk_im = Image.fromarray(combined1, mode='CMYK')
 
 #cmyk_im.show()
-
