@@ -42,11 +42,11 @@ def rysuj_pasy_poziome(w,h,grub):
         for g in range(ile):
             i = k * grub + g
             for j in range(w):
-                tab[i,j] = k % 2
+                tab[i, j] = k % 2
     tab = tab * 255
     return Image.fromarray(tab)
 
-rysuj_pasy_poziome(100,180,20).show()
+rysuj_pasy_poziome(100,200,20).show()
 
 def wstaw_obraz(w,h,m,n, obraz):
     tab_obraz = np.asarray(obraz).astype(np.int_)

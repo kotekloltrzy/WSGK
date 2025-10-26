@@ -2,6 +2,19 @@ from PIL import Image
 import numpy as np
 
 inicjaly = Image.open("inicjaly.bmp")
+pionowe = Image.open("pionowe.bmp")
+pionowe_tablica = np.asarray(pionowe)
+rysuj_ramki = Image.open("rysuj_ramki.bmp")
+rysuj_ramki_tablica = np.asarray(rysuj_ramki)
+
+print("Tryb rysuj ramki: ", rysuj_ramki.mode)
+print("Rozmiar obrazu: ", rysuj_ramki.size)
+print("Wymiar tablicy: ", rysuj_ramki_tablica.ndim)
+print("Liczba elementów tablicy: ", rysuj_ramki_tablica.size)
+
+print("Tryb pionowe: ", pionowe.mode)
+print("Piksel (66,13): ", pionowe_tablica[13][66])
+print("Wartość elementu tablicy (97,20): ", pionowe_tablica[97][20])
 
 print("tryb", inicjaly.mode)
 print("format", inicjaly.format)
@@ -32,7 +45,7 @@ def rysuj_ramke_w_obrazie(obraz, grub):
     return Image.fromarray(tab)
 
 
-rysuj_ramke_w_obrazie(inicjaly, 5).show()
+# rysuj_ramke_w_obrazie(inicjaly, 5).show()
 
 # Zadanie 2 1.1
 
@@ -54,17 +67,17 @@ def rysuj_ramki(w, h, grub):
     return Image.fromarray(tab)
 
 
-rysuj_ramki(200, 150, 10).show()
+# rysuj_ramki(200, 150, 10).show()
 
 # Zadanie 2 1.2
 
 
-def rysuj_pasy_pionowe(w, h, grub):
+def rysuj_paski_pionowe(w, h, grub):
     t = (h, w)
     tab = np.ones(t, dtype=np.uint8)
     ile = int(w/grub)
     for k in range(ile):
-        for g in range(ile):
+        for g in range(grub):
             i = k * grub + g
             for j in range(h):
                 tab[j, i] = k % 2
@@ -72,7 +85,7 @@ def rysuj_pasy_pionowe(w, h, grub):
     return Image.fromarray(tab)
 
 
-rysuj_pasy_pionowe(100, 180, 10).show()
+# rysuj_paski_pionowe(200, 100, 10).show()
 
 # Zadanie 2 1.3
 
@@ -92,7 +105,7 @@ def rysuj_wlasne(w, h, ile):
     return Image.fromarray(tab)
 
 
-rysuj_wlasne(200, 160, 4).show()
+rysuj_wlasne(200, 160, 4).save("rysuj_wlasne.bmp")
 
 
 # Zadanie 3
@@ -100,13 +113,13 @@ rysuj_wlasne(200, 160, 4).show()
 inicjaly = Image.open("inicjaly.bmp")
 obraz_bazowy = Image.open("obraz_bazowy.bmp")
 
-def wstaw_obraz_w_obraz(obraz_bazowy, obraz_wstawiany, m, n):
+
+def wstaw_obraz_w_obraz(obraz_baz, obraz_wstawiany, m, n):
     tab_obraz_wstawiany = np.asarray(obraz_wstawiany).astype(np.uint8)
-    tab_obraz_bazowy = np.asarray(obraz_bazowy).astype(np.uint8)
+    tab_obraz_bazowy = np.asarray(obraz_baz).astype(np.uint8)
     h, w = tab_obraz_bazowy.shape
     h0, w0 = tab_obraz_wstawiany.shape
-    t = (h, w)
-    tab = np.asarray(obraz_bazowy).astype(np.uint8)
+    tab = np.asarray(obraz_baz).astype(np.uint8)
     n_k = min(h, n + h0)
     m_k = min(w, m + w0)
     n_p = max(0, n)
@@ -118,4 +131,12 @@ def wstaw_obraz_w_obraz(obraz_bazowy, obraz_wstawiany, m, n):
     return Image.fromarray(tab)
 
 
-wstaw_obraz_w_obraz(obraz_bazowy, inicjaly, 50, 10).show()
+# wstaw_obraz_w_obraz(obraz_bazowy, inicjaly, 50, 10).show()
+
+tablica = np.loadtxt("tablica.txt", dtype=np.uint8)
+tablica = tablica.astype(bool)
+tablica_obraz = Image.fromarray(tablica)
+rysuj_ramke_w_obrazie(tablica_obraz, 40).save("ramka_w_obrazie.bmp")
+
+wstaw_obraz_w_obraz(rysuj_paski_pionowe(300,200,15), inicjaly, 250, 100).save("obraz_w_obraz_1.bmp")
+wstaw_obraz_w_obraz(rysuj_paski_pionowe(300,200,15), inicjaly, 0, 0).save("obraz_w_obraz_2.bmp")
