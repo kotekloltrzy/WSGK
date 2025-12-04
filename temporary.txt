@@ -56,9 +56,22 @@ plt.show()
 
 def histogram_equalization(im):
     hist_kumul = histogram_cumul(im)
-    eq_np = (255*hist_kumul[im]).astype(np.uint8)
-    return Image.fromarray(eq_np, mode="L")
+    lut = np.floor(255*hist_kumul).astype(np.uint8)
+    eq_im = lut[im]
+    return Image.fromarray(eq_im, mode="L")
 
 equalized = histogram_equalization(im_np)
 equalized.show()
 equalized.save("equalized.png")
+
+
+D:\174748\lab8\pythonProject1\Lab8.py:61: DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)
+  return Image.fromarray(eq_im, mode="L")
+Traceback (most recent call last):
+  File "D:\174748\lab8\pythonProject1\Lab8.py", line 63, in <module>
+    equalized = histogram_equalization(im_np)
+  File "D:\174748\lab8\pythonProject1\Lab8.py", line 61, in histogram_equalization
+    return Image.fromarray(eq_im, mode="L")
+  File "D:\174748\lab8\pythonProject1\.venv\lib\site-packages\PIL\Image.py", line 3324, in fromarray
+    raise ValueError(msg)
+ValueError: Too many dimensions: 3 > 2.
