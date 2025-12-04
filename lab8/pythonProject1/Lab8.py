@@ -27,7 +27,7 @@ hist1 = szary.histogram()
 plt.title("Zadanie 2")
 plt.bar(range(256), hist1[:], color='g', alpha=0.8)
 plt.show()
-im_np = np.array(obraz)
+im_np = np.array(szary)
 
 # Zadanie 3
 
@@ -56,8 +56,9 @@ plt.show()
 
 def histogram_equalization(im):
     hist_kumul = histogram_cumul(im)
-    eq_np = (255*hist_kumul[im]).astype(np.uint8)
-    return Image.fromarray(eq_np, mode="L")
+    lut = np.floor(255*hist_kumul).astype(np.uint8)
+    eq_im = lut[im]
+    return Image.fromarray(eq_im, mode="L")
 
 equalized = histogram_equalization(im_np)
 equalized.show()
