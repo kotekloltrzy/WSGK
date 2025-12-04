@@ -1,0 +1,64 @@
+from PIL import Image
+import numpy as np
+from PIL import ImageChops, ImageOps
+from PIL import ImageStat as stat
+import matplotlib.pyplot as plt
+
+obraz = Image.open("obraz.jpg")
+
+# Zadanie 1
+
+def statystyki(im):
+    s = stat.Stat(im)
+    print("extrema ", s.extrema)  # max i min
+    print("count ", s.count)  # zlicza
+    print("mean ", s.mean)  # srednia
+    print("median ", s.median)  # mediana
+    print("stddev ", s.stddev)  # odchylenie standardowe
+
+statystyki(obraz)
+print(obraz.mode)
+szary = obraz.convert('L')
+print(szary.mode)
+# Zadanie 2
+
+statystyki(szary)
+hist1 = szary.histogram()
+plt.title("Zadanie 2")
+plt.bar(range(256), hist1[:], color='g', alpha=0.8)
+plt.show()
+im_np = np.array(obraz)
+
+# Zadanie 3
+
+def histogram_norm(im):
+    hist,_ = np.histogram(im, bins=256,range=(0,255))
+    return (hist/im.size).tolist()
+
+hist_norm = histogram_norm(im_np)
+plt.bar(range(256),hist_norm, color='b', alpha=0.8)
+plt.title("Znormalizowany histogram")
+plt.show()
+
+# Zadanie 4
+
+def histogram_cumul(im):
+    hist_temp = histogram_norm(im)
+    hist_kumul = np.cumsum(hist_temp)
+    return hist_kumul.tolist()
+
+hist_skumulowany = histogram_cumul(im_np)
+plt.bar(range(256), hist_skumulowany, color='r', alpha=0.8)
+plt.title("Skumulowany histogram")
+plt.show()
+
+# Zadanie 5
+
+def histogram_equalization(im):
+    hist_kumul = histogram_cumul(im)
+    eq_np = (255*hist_kumul[im]).astype(np.uint8)
+    return Image.fromarray(eq_np, mode="L")
+
+equalized = histogram_equalization(im_np)
+equalized.show()
+equalized.save("equalized.png")
